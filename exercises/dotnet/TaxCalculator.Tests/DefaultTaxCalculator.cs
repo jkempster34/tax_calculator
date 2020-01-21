@@ -20,6 +20,11 @@ namespace TaxCalculator.Tests
                 case FuelType.Diesel:
                     index = DieselPriceIndex.index;
                     break;
+                case FuelType.AlternativeFuel:
+                    index = AlternativePriceIndex.index;
+                    break;
+                case FuelType.Electric:
+                    return 0;
             }
 
             foreach (var taxband in index)
