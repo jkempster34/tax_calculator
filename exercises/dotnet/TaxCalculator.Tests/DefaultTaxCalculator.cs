@@ -7,14 +7,16 @@ namespace TaxCalculator.Tests
     public class DefaultTaxCalculator : TaxCalculator
     {
         private bool ToggleFeatureAfterFirstYear { get; set; }
+        private bool ToggleFeatureAfterFirstYearForExpensiveVehicleTest { get; set; }
 
         public DefaultTaxCalculator()
         {
         }
 
-        public DefaultTaxCalculator(bool toggleFeatureAfterFirstYear)
+        public DefaultTaxCalculator(bool toggleFeatureAfterFirstYear, bool toggleFeatureAfterFirstYearForExpensiveVehicleTest)
         {
             ToggleFeatureAfterFirstYear = toggleFeatureAfterFirstYear;
+            ToggleFeatureAfterFirstYearForExpensiveVehicleTest = toggleFeatureAfterFirstYearForExpensiveVehicleTest;
         }
 
         public override int CalculateTax(Vehicle vehicle)
@@ -22,6 +24,24 @@ namespace TaxCalculator.Tests
             var emissions = vehicle.Co2Emissions;
             int? cost = null;
             Dictionary<int, int> index = null;
+
+            if(ToggleFeatureAfterFirstYearForExpensiveVehicleTest)
+            {
+                if (DateTime.Now.AddYears(-1).Year >= vehicle.DateOfFirstRegistration.Year && vehicle.ListPrice > 40000)
+                {
+                    switch (vehicle.FuelType)
+                    {
+                        case FuelType.Petrol:
+                            return 450;
+                        case FuelType.Diesel:
+                            return 450;
+                        case FuelType.AlternativeFuel:
+                            return 440;
+                        case FuelType.Electric:
+                            return 310;
+                    }
+                }
+            }
 
             if (ToggleFeatureAfterFirstYear)
             {
