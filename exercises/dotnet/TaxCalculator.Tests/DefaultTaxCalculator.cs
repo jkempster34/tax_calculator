@@ -9,7 +9,7 @@ namespace TaxCalculator.Tests
         public override int CalculateTax(Vehicle vehicle)
         {
             var emissions = vehicle.Co2Emissions;
-            var cost = 0;
+            int? cost = null;
             Dictionary<int, int> index = null;
 
             switch (vehicle.FuelType)
@@ -34,7 +34,13 @@ namespace TaxCalculator.Tests
                     return taxband.Value;
                 }
             }
-            return cost;
+
+            if (cost.HasValue)
+            {
+                return cost.Value;
+            }
+            else return -1;
+
 
 
         }
